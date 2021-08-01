@@ -2,7 +2,7 @@
 	"miniprogramRoot": "dist/",
 	"projectname": "myApp",
 	"description": "y[Citai——weapp",
-	"appid": "touristappid",
+	"appid": "wx02f8bc96a825fe27",
 	"setting": {
 		"urlCheck": true,
 		"es6": false,
