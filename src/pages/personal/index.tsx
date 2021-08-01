@@ -7,7 +7,7 @@ import "taro-ui/dist/style/components/button.scss" // 按需引入
 import './index.less'
 
 // @connect(({ counter }) => counter)
-class Learn extends Component {
+class Personal extends Component {
 
   componentWillMount() { }
 
@@ -22,10 +22,10 @@ class Learn extends Component {
   render() {
     return (
       <View className='index'>
-       <Text>Hello world!</Text>
+        个人信息
       </View>
     )
   }
 }
 
-export default Learn;
+export default Personal;
