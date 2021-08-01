@@ -1,5 +1,5 @@
 import { Component } from 'react'
-import { Provider } from '@tarojs/redux'
+import { Provider } from 'react-redux'
 import configStore from './store'
 
 import './app.less'
