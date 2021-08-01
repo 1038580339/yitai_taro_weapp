@@ -213,7 +213,9 @@ export default class PersonalEdit extends Component<any, any> {
                     </View>
                 </View>
                 <AtButton circle  type="primary" className="rlyz_btn">人脸验证</AtButton>
-                <BottomBtn btn2Title="保存修改"/>
+                <View style={{marginTop: '38px'}}>
+                    <BottomBtn btn2Title="保存修改"/>
+                </View>
             </View>
         </View>)
     }
