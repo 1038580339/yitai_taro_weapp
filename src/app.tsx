@@ -3,6 +3,7 @@ import { Provider } from 'react-redux'
 import configStore from './store'
 
 import './app.less'
+import 'taro-ui/dist/style/index.scss' // 全局引入一次即可
 
 const store = configStore()
 

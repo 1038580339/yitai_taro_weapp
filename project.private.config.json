@@ -17,6 +17,12 @@
           "pathName": "pages/personalEdit/index",
           "query": "",
           "scene": null
+        },
+        {
+          "name": "pages/projectDetail/index",
+          "pathName": "pages/projectDetail/index",
+          "query": "",
+          "scene": null
         }
       ]
     }

@@ -1,3 +1,7 @@
 export default {
-  navigationBarTitleText: '个人信息'
+  "navigationBarBackgroundColor": "#0a9ee1",
+  "navigationBarTextStyle": "white",
+  "navigationBarTitleText": "我的",
+  "backgroundColor": "#eeeeee",
+  "backgroundTextStyle": "light"
 }
