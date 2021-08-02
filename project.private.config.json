@@ -23,6 +23,12 @@
           "pathName": "pages/projectDetail/index",
           "query": "",
           "scene": null
+        },
+        {
+          "name": "pages/reward/index",
+          "pathName": "pages/reward/index",
+          "query": "",
+          "scene": null
         }
       ]
     }
