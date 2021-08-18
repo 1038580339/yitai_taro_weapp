@@ -34,15 +34,15 @@ class Index extends Component {
   componentWillMount() {}
 
   componentDidMount() {
-    console.log("api", api.LOGIN);
-    api
-      .LOGIN()
-      .then((res) => {
-        console.log(13424, res);
-      })
-      .catch((e) => {
-        console.log("e", e);
-      });
+    // console.log("api", api.LOGIN);
+    // api
+    //   .LOGIN()
+    //   .then((res) => {
+    //     console.log(13424, res);
+    //   })
+    //   .catch((e) => {
+    //     console.log("e", e);
+    //   });
   }
 
   componentWillUnmount() {}

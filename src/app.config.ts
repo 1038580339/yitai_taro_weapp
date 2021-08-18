@@ -5,7 +5,8 @@ export default {
     "pages/personalEdit/index",
     "pages/projectDetail/index",
     "pages/personal/index",
-    "pages/reward/index"
+    "pages/reward/index",
+    "pages/login/index"
   ],
   window: {
     backgroundTextStyle: "light",

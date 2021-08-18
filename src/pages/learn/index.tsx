@@ -5,6 +5,7 @@ import { connect } from 'react-redux'
 // const connect: Function = concatRedux;
 import "taro-ui/dist/style/components/button.scss" // 按需引入
 import './index.less'
+import api from "../../interMiddle";
 
 declare function create(o: object | null): void;
 interface tabListItem {
@@ -29,7 +30,13 @@ class Learn extends Component {
     }
   }
   state: State
-  componentWillMount() { }
+  async componentWillMount() {
+    let userInfo = await api.PROJECTPAGE({
+      start: 0,
+      length: 10
+    });
+    console.log(userInfo);
+  }
 
   componentDidMount() { }
 
