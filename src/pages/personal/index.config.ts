@@ -3,5 +3,6 @@ export default {
   "navigationBarTextStyle": "white",
   "navigationBarTitleText": "我的",
   "backgroundColor": "#eeeeee",
-  "backgroundTextStyle": "light"
+  "backgroundTextStyle": "light",
+  "enablePullDownRefresh": true,
 }

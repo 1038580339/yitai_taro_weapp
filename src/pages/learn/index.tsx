@@ -1,9 +1,9 @@
 import { Component } from 'react'
 import { View, Text, Image } from '@tarojs/components'
-import { AtButton, AtTabs, AtTabsPane } from 'taro-ui'
+import { AtButton, AtTabs, AtTabsPane, AtLoadMore } from 'taro-ui'
 import { connect } from 'react-redux'
 // const connect: Function = concatRedux;
-import "taro-ui/dist/style/components/button.scss" // 按需引入
+// import "taro-ui/dist/style/components/button.scss" // 按需引入
 import './index.less'
 import api from "../../interMiddle";
 
@@ -12,9 +12,16 @@ interface tabListItem {
   title: string;
 }
 interface State {
-  tabList?: Array<tabListItem>;
-  current?: number;
-  list?: Array<any>;
+  tabList: Array<tabListItem>;
+  current: number;
+  project: Project;
+  myProject: Project;
+}
+
+interface Project {
+  list: Array<any>;
+  status: "more" | "loading" | "noMore" | undefined;
+  start: number;
 }
 // @connect(({ counter }) => counter)
 class Learn extends Component {
@@ -26,38 +33,76 @@ class Learn extends Component {
         { title: '实时项目' }, { title: '已完成项目' }
       ],
       current: 0,
-      list: [1, 2, 3, 4, 5, 6, 7, 8, 90, 10]
+      project: {
+        list: [],
+        status: 'more',
+        start: 0,
+      },
+      myProject: {
+        list: [],
+        status: 'more',
+        start: 0,
+      }
+
     }
   }
   state: State
-  async componentWillMount() {
-    let userInfo = await api.PROJECTPAGE({
-      start: 0,
-      length: 10
-    });
-    console.log(userInfo);
+  componentWillMount() {
+
   }
 
   componentDidMount() { }
 
   componentWillUnmount() { }
 
-  componentDidShow() { }
+  async componentDidShow() {
+    const { current, project, myProject } = this.state;
+    let start;
+    let nowProject = current === 0 ? project : myProject;
+    let userInfo = await api.PROJECTPAGE({
+      start: nowProject.start,
+      length: 10,
+      state: current + 1
+    });
+    this.setState({
+      [current === 0 ? 'project' : 'myProject']: {
+        ...nowProject,
+        list: [...nowProject['list'],
+        ...userInfo.data.list
+        ],
+        start: nowProject.start + 1
+
+      }
+    })
+  }
 
   componentDidHide() { }
 
   handleClick = (value) => {
+    // console.log(value);
     this.setState({
       current: value
     })
   }
+  getList = () => {
+
+  }
 
   render() {
+    const { project, myProject, current } = this.state;
+    let list, status;
+    if (current === 0) {
+      list = project.list;
+      status = project.status;
+    } else if (current === 1) {
+      list = myProject.list;
+      status = myProject.status;
+    }
     return (
       <View className='index'>
         <AtTabs current={this.state.current} tabList={this.state.tabList} onClick={this.handleClick}>
-          <AtTabsPane current={this.state.current} index={0} >
-          </AtTabsPane>
+          {/* <AtTabsPane current={this.state.current} index={0} >
+          </AtTabsPane> */}
           {
             this.state.tabList.map((item, index) => {
               return <AtTabsPane current={this.state.current} index={index} >
@@ -66,7 +111,7 @@ class Learn extends Component {
           }
         </AtTabs>
         {
-          this.state.list.map((item, index) => {
+          list.map((item, index) => {
             return <View className='at-row card'>
               <View className='at-col at-col-4'>
                 <Image style={{ width: '100%', height: '100%' }} mode="scaleToFill" src={"../static/bag_hover.png"}></Image>
@@ -82,6 +127,10 @@ class Learn extends Component {
             </View>
           })
         }
+        <AtLoadMore
+          onClick={this.getList}
+          status={status}
+        />
       </View>
     )
   }

@@ -52,15 +52,15 @@ function baseOptions(params, method = 'GET') {
         //   __ajax: true,
         // });
         let userInfo = await Taro.request({
-          isShowLoading: false,
+          isShowLoading: true,
           loadingText: '正在加载',
           url: base + '/a/login',
           data: {
             username: 'thinkgem',
             password: 'admin',
             mobileLogin: true,
-            wechatLogin: true,
-            code: res.code,
+            // wechatLogin: true,
+            // code: res.code,
             __ajax: true,
           },
           method: 'POST',
@@ -83,7 +83,8 @@ function baseOptions(params, method = 'GET') {
             logError('api', '请求接口出现问题', e)
           }
         })
-        if (userInfo.data.sessionid === '用户不存在。') {
+        console.log(userInfo);
+        if (!userInfo.data.sessionid) {
           Taro.redirectTo({
             url: '/pages/login/index'
           })
