@@ -114,11 +114,11 @@ class Learn extends Component {
           list.map((item, index) => {
             return <View className='at-row card'>
               <View className='at-col at-col-4'>
-                <Image style={{ width: '100%', height: '100%' }} mode="scaleToFill" src={"../static/bag_hover.png"}></Image>
+                <Image style={{ width: '100%', height: '100%' }} mode="scaleToFill" src={item.logoUrl}></Image>
               </View>
               <View className='at-col at-col-8'>
-                <view className='title'>公开课：用企业微信组号服务123于增长12e43</view>
-                <view className='artContent'>最新最全官方教学与案列</view>
+                <view className='title'>{item.name}</view>
+                <view className='artContent'>{item.introduction}</view>
                 <view className='artTip'>
                   <Text>地点：北京</Text>
                   <Text style={{ float: 'right' }}>2021-05-23</Text>
