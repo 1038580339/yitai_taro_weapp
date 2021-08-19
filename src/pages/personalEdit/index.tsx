@@ -222,20 +222,6 @@ export default class PersonalEdit extends Component<any, any> {
                         });
                       }
                     });
-
-                    // const senddata = {
-                    //   //   type: "1",
-                    //   avatar_file: res.tempFilePaths[0]
-                    // };
-                    // That.uploadImg(senddata).then(res => {
-                    //   console.log("uploadImg", res);
-                    //   //   That.setState({
-                    //   //     data: {
-                    //   //       ...That.state.data,
-                    //   //       tx: res.tempFilePaths[0]
-                    //   //     }
-                    //   //   });
-                    // });
                   }
                 });
               }}
