@@ -55,12 +55,34 @@ class Learn extends Component {
 
   componentWillUnmount() { }
 
-  async componentDidShow() {
+  componentDidShow() {
     const { current, project, myProject } = this.state;
-    let start;
+
     let nowProject = current === 0 ? project : myProject;
+    let start = nowProject.start;
+    if (start === 0) {
+      this.getList();
+    }
+  }
+
+  componentDidHide() { }
+
+  getList = async () => {
+    const { current, project, myProject } = this.state;
+
+
+    let nowProject = current === 0 ? project : myProject;
+    let start = nowProject.start;
+
+    this.setState({
+      [current === 0 ? 'project' : 'myProject']: {
+        ...nowProject,
+        status: "loading"
+      }
+    })
+
     let userInfo = await api.PROJECTPAGE({
-      start: nowProject.start,
+      start: start,
       length: 10,
       state: current + 1
     });
@@ -70,23 +92,27 @@ class Learn extends Component {
         list: [...nowProject['list'],
         ...userInfo.data.list
         ],
-        start: nowProject.start + 1
-
+        start: start + 1,
+        status: userInfo.data.list.length ? 'more' : 'noMore'
       }
     })
   }
-
-  componentDidHide() { }
 
   handleClick = (value) => {
     // console.log(value);
     this.setState({
       current: value
+    }, () => {
+      const { current, project, myProject } = this.state;
+
+      let nowProject = current === 0 ? project : myProject;
+      let start = nowProject.start;
+      if (start === 0) {
+        this.getList();
+      }
     })
   }
-  getList = () => {
 
-  }
 
   render() {
     const { project, myProject, current } = this.state;
@@ -121,7 +147,7 @@ class Learn extends Component {
                 <view className='artContent'>{item.introduction}</view>
                 <view className='artTip'>
                   <Text>地点：北京</Text>
-                  <Text style={{ float: 'right' }}>2021-05-23</Text>
+                  <Text style={{ float: 'right' }}>{item.updateDate}</Text>
                 </view>
               </View>
             </View>
