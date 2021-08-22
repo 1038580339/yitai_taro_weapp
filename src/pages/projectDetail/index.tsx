@@ -17,7 +17,9 @@ export default class ProjectDetail extends Component<any, any> {
       name: "",
       joinUsOffline: "",
       joinUsOnline: "",
-      introduction: ""
+      introduction: "",
+      readingQuantity: 0,
+      address: ""
     };
   }
 
@@ -46,7 +48,9 @@ export default class ProjectDetail extends Component<any, any> {
           name: project.name,
           joinUsOffline: project.joinUsOffline,
           joinUsOnline: project.joinUsOnline,
-          introduction: project.introduction
+          introduction: project.introduction,
+          readingQuantity: project.readingQuantity,
+          address: project.address
         });
       })
       .catch(e => {
@@ -86,15 +90,17 @@ export default class ProjectDetail extends Component<any, any> {
       joinUsOnline,
       joinUsOffline,
       introduction,
-      isOpened
+      isOpened,
+      readingQuantity,
+      address
     } = this.state;
     return (
       <View className="project_Detail">
         <View className="project_content">
           <Text className="project_name">{name}</Text>
           <View className="projrct_heard">
-            <Text className="projrct_dd">地点：北京</Text>
-            <Text className="projrct_yd">阅读量：234</Text>
+            <Text className="projrct_dd">地点：{`${address}`}</Text>
+            <Text className="projrct_yd">{`阅读量：${readingQuantity}`}</Text>
           </View>
           <Text className="project_title">项目介绍：</Text>
           <Text className="project_content_text">
