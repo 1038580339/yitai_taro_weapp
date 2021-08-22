@@ -18,6 +18,10 @@ const baseData = {
   GETUSERINFO: {
     url: '/a/api/user/ytdpUser/getUserInfo',
     method: 'get'
+  },
+  FINDPROJECTTYPE: {
+    url: '/a/api/project/ytdpProject/findProjectType',
+    method: 'get'
   }
 }
 
@@ -33,5 +37,8 @@ export default {
   },
   GETUSERINFO: options => {
     return feth('GETUSERINFO', baseData['GETUSERINFO'], options)
+  },
+  FINDPROJECTTYPE: options => {
+    return feth('FINDPROJECTTYPE', baseData['FINDPROJECTTYPE'], options)
   },
 }

@@ -17,6 +17,10 @@ interface tabListItem {
   title: string;
 }
 
+interface State {
+  [propName: string]: any
+}
+
 class Index extends Component {
   constructor(props) {
     super(props);
@@ -44,11 +48,7 @@ class Index extends Component {
   componentDidShow() { }
 
   componentDidHide() { }
-  handleClick = (value) => {
-    this.setState({
-      current: value,
-    });
-  };
+
   getPhoneNumber = (data) => {
     console.log(data);
   }

@@ -42,31 +42,31 @@ async function baseOptions(params, method = 'GET') {
     // }
   } else {
     let needCall = false;
-    let res;
-    Taro.login({
-      success: async res => {
-        // let userInfo = await api.LOGIN({
-        //   // wechatLogin: true,
-        //   // code: res.code,
-        //   username: 'admin',
-        //   password: 'admin',
-        //   mobileLogin: true,
-        //   __ajax: true,
-        // });
-        res = res;
-      }
-    })
+    let res = await login();
+    // Taro.login({
+    //   success: res => {
+    //     // let userInfo = await api.LOGIN({
+    //     //   // wechatLogin: true,
+    //     //   // code: res.code,
+    //     //   username: 'admin',
+    //     //   password: 'admin',
+    //     //   mobileLogin: true,
+    //     //   __ajax: true,
+    //     // });
+    //     res = res;
+    //   }
+    // })
 
     let userInfo = await Taro.request({
       isShowLoading: true,
       loadingText: '正在加载',
       url: base + '/a/login',
       data: {
-        username: 'thinkgem',
-        password: 'admin',
-        mobileLogin: true,
-        // wechatLogin: true,
-        // code: res.code,
+        // username: 'thinkgem',
+        // password: 'admin',
+        // mobileLogin: true,
+        wechatLogin: true,
+        code: res.code,
         __ajax: true,
       },
       method: 'POST',
@@ -149,6 +149,25 @@ async function baseOptions(params, method = 'GET') {
 
 
   return Taro.request(option)
+}
+
+
+function login() {
+  return new Promise((resolve, reject) => {
+    Taro.login({
+      success: res => {
+        // let userInfo = await api.LOGIN({
+        //   // wechatLogin: true,
+        //   // code: res.code,
+        //   username: 'admin',
+        //   password: 'admin',
+        //   mobileLogin: true,
+        //   __ajax: true,
+        // });
+        resolve(res);
+      }
+    })
+  })
 }
 
 export default {

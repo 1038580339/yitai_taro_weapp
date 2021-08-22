@@ -23,7 +23,7 @@ interface userInfo {
   card?: boolean;
 }
 interface State {
-  list?: Array<userInfo>;
+  list: Array<userInfo>;
   userInfo: UserInfo;
 }
 interface UserInfo {
@@ -89,8 +89,8 @@ class Personal extends Component {
             </View>
             <View className='at-col at-col-6'>
               <View className='top_name'>{sysUser.name}</View>
-              <View className='top_tip'>学习时长：10H</View>
-              <View className='top_tip'>积分：211</View>
+              <View className='top_tip'>学习时长：{userInfo.learningTime}H</View>
+              <View className='top_tip'>积分：{userInfo.point}</View>
             </View>
             <View className='at-col at-col-3'>
               <Image className='image_button' mode="scaleToFill" src={message} onClick={this.openEdit}></Image>

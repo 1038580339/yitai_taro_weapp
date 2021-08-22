@@ -168,7 +168,7 @@ class Learn extends Component {
                 <view className='title'>{item.name}</view>
                 <view className='artContent'>{item.introduction}</view>
                 <view className='artTip'>
-                  <Text>地点：北京</Text>
+                  <Text>地点：{item.address}</Text>
                   <Text style={{ float: 'right' }}>{item.updateDate}</Text>
                 </view>
               </View>
