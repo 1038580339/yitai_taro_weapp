@@ -17,9 +17,9 @@ interface tabListItem {
   title: string;
 }
 interface State {
-  tabList?: Array<tabListItem>;
-  current?: number;
-  list?: Array<any>;
+  tabList: Array<tabListItem>;
+  current: number;
+  list: Array<any>;
 }
 class Index extends Component {
   constructor(props) {

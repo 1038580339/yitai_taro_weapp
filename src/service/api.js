@@ -31,7 +31,7 @@ export const logError = (name, action, info) => {
   // }
 }
 
-function baseOptions(params, method = 'GET') {
+async function baseOptions(params, method = 'GET') {
 
 
   let token = Taro.getStorageSync('userInfo');
@@ -41,7 +41,9 @@ function baseOptions(params, method = 'GET') {
     //   ['jeesite.session.id']: token.sessionid
     // }
   } else {
-    return Taro.login({
+    let needCall = false;
+    let res;
+    Taro.login({
       success: async res => {
         // let userInfo = await api.LOGIN({
         //   // wechatLogin: true,
@@ -51,49 +53,58 @@ function baseOptions(params, method = 'GET') {
         //   mobileLogin: true,
         //   __ajax: true,
         // });
-        let userInfo = await Taro.request({
-          isShowLoading: true,
-          loadingText: '正在加载',
-          url: base + '/a/login',
-          data: {
-            username: 'thinkgem',
-            password: 'admin',
-            mobileLogin: true,
-            // wechatLogin: true,
-            // code: res.code,
-            __ajax: true,
-          },
-          method: 'POST',
-          header: {
-            'content-type': 'application/x-www-form-urlencoded',
-            token: token
-          },
-          success(res) {
-            if (res.statusCode === HTTP_STATUS.NOT_FOUND) {
-              return logError('api', '请求资源不存在')
-            } else if (res.statusCode === HTTP_STATUS.BAD_GATEWAY) {
-              return logError('api', '服务端出现了问题')
-            } else if (res.statusCode === HTTP_STATUS.FORBIDDEN) {
-              return logError('api', '没有权限访问')
-            } else if (res.statusCode === HTTP_STATUS.SUCCESS) {
-              return res.data
-            }
-          },
-          error(e) {
-            logError('api', '请求接口出现问题', e)
-          }
-        })
-        console.log(userInfo);
-        if (!userInfo.data.sessionid) {
-          Taro.redirectTo({
-            url: '/pages/login/index'
-          })
-        } else {
-          Taro.setStorageSync('userInfo', userInfo.data);
-          return baseOptions(params, method);
-        }
+        res = res;
       }
     })
+
+    let userInfo = await Taro.request({
+      isShowLoading: true,
+      loadingText: '正在加载',
+      url: base + '/a/login',
+      data: {
+        username: 'thinkgem',
+        password: 'admin',
+        mobileLogin: true,
+        // wechatLogin: true,
+        // code: res.code,
+        __ajax: true,
+      },
+      method: 'POST',
+      header: {
+        'content-type': 'application/x-www-form-urlencoded',
+        token: token
+      },
+      success(res) {
+        if (res.statusCode === HTTP_STATUS.NOT_FOUND) {
+          return logError('api', '请求资源不存在')
+        } else if (res.statusCode === HTTP_STATUS.BAD_GATEWAY) {
+          return logError('api', '服务端出现了问题')
+        } else if (res.statusCode === HTTP_STATUS.FORBIDDEN) {
+          return logError('api', '没有权限访问')
+        } else if (res.statusCode === HTTP_STATUS.SUCCESS) {
+          return res.data
+        }
+      },
+      error(e) {
+        logError('api', '请求接口出现问题', e)
+      }
+    })
+    console.log(userInfo);
+    if (!userInfo.data.sessionid) {
+      Taro.redirectTo({
+        url: '/pages/login/index'
+      })
+    } else {
+      await Taro.setStorageSync('userInfo', userInfo.data);
+      needCall = true;
+    }
+
+
+    if (needCall) {
+      // console.log(1);
+      return baseOptions(params, method);
+    }
+
   }
 
 

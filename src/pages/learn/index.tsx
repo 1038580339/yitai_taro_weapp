@@ -6,6 +6,7 @@ import { connect } from 'react-redux'
 // import "taro-ui/dist/style/components/button.scss" // 按需引入
 import './index.less'
 import api from "../../interMiddle";
+import Taro from '@tarojs/taro'
 
 declare function create(o: object | null): void;
 interface tabListItem {
@@ -22,6 +23,7 @@ interface Project {
   list: Array<any>;
   status: "more" | "loading" | "noMore" | undefined;
   start: number;
+  recordsFiltered: number | null
 }
 // @connect(({ counter }) => counter)
 class Learn extends Component {
@@ -37,11 +39,13 @@ class Learn extends Component {
         list: [],
         status: 'more',
         start: 0,
+        recordsFiltered: null,
       },
       myProject: {
         list: [],
         status: 'more',
         start: 0,
+        recordsFiltered: null,
       }
 
     }
@@ -81,11 +85,22 @@ class Learn extends Component {
       }
     })
 
+    if (nowProject.recordsFiltered != null && nowProject['list'].length >= nowProject.recordsFiltered) {
+      this.setState({
+        [current === 0 ? 'project' : 'myProject']: {
+          ...nowProject,
+          status: "noMore"
+        }
+      })
+      return;
+    }
+
     let userInfo = await api.PROJECTPAGE({
       start: start,
       length: 10,
       state: current + 1
     });
+    // console.log(userInfo);
     this.setState({
       [current === 0 ? 'project' : 'myProject']: {
         ...nowProject,
@@ -93,7 +108,8 @@ class Learn extends Component {
         ...userInfo.data.list
         ],
         start: start + 1,
-        status: userInfo.data.list.length ? 'more' : 'noMore'
+        status: 'more',
+        recordsFiltered: userInfo.data.recordsFiltered,
       }
     })
   }
@@ -110,6 +126,12 @@ class Learn extends Component {
       if (start === 0) {
         this.getList();
       }
+    })
+  }
+
+  toDetail = id => {
+    Taro.navigateTo({
+      url: `/pages/projectDetail/index?id=${id}`,
     })
   }
 
@@ -138,7 +160,7 @@ class Learn extends Component {
         </AtTabs>
         {
           list.map((item, index) => {
-            return <View className='at-row card'>
+            return <View className='at-row card' onClick={e => this.toDetail(item.id)}>
               <View className='at-col at-col-4'>
                 <Image style={{ width: '100%', height: '100%' }} mode="scaleToFill" src={item.logoUrl}></Image>
               </View>
