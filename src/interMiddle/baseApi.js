@@ -24,7 +24,7 @@ const baseData = {
     method: 'get'
   },
   DECRYPT: {
-    url: '/wx/decrypt',
+    url: '/wx/decryptPhoneNumber',
     method: 'get'
   }
 }

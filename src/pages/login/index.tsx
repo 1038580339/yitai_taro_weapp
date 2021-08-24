@@ -61,6 +61,24 @@ class Index extends Component {
           iv: data.detail.iv
         })
         console.log(info);
+        if (info.data.data) {
+          Taro.login({
+            success: async res => {
+              let userInfo = await api.LOGIN({
+                wechatLogin: true,
+                code: res.code,
+                username: info.data.data,
+                password: info.data.data,
+                mobileLogin: true,
+                __ajax: true,
+              });
+              await Taro.setStorageSync('userInfo', userInfo.data);
+              Taro.switchTab({
+                url: '/pages/learn/index'
+              })
+            }
+          })
+        }
       }
     })
 

@@ -32,10 +32,13 @@ export const logError = (name, action, info) => {
 }
 
 async function baseOptions(params, method = 'GET') {
-
+  let {
+    url,
+    data
+  } = params
 
   let token = Taro.getStorageSync('userInfo');
-  if (token) {
+  if (token || String(url).indexOf('decrypt') !== -1 || String(url).indexOf('login') !== -1) {
     // options = {
     //   ...(options || {}),
     //   ['jeesite.session.id']: token.sessionid
@@ -69,7 +72,7 @@ async function baseOptions(params, method = 'GET') {
         code: res.code,
         __ajax: true,
       },
-      method: 'POST',
+      method: 'GET',
       header: {
         'content-type': 'application/x-www-form-urlencoded',
         token: token
@@ -94,6 +97,7 @@ async function baseOptions(params, method = 'GET') {
       Taro.redirectTo({
         url: '/pages/login/index'
       })
+      return;
     } else {
       await Taro.setStorageSync('userInfo', userInfo.data);
       needCall = true;
@@ -109,10 +113,7 @@ async function baseOptions(params, method = 'GET') {
 
 
 
-  let {
-    url,
-    data
-  } = params
+
   // let token = getApp().globalData.token
   // if (!token) login()
   console.log('params', params)
