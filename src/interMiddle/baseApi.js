@@ -22,6 +22,10 @@ const baseData = {
   FINDPROJECTTYPE: {
     url: '/a/api/project/ytdpProject/findProjectType',
     method: 'get'
+  },
+  DECRYPT: {
+    url: '/wx/decrypt',
+    method: 'get'
   }
 }
 
@@ -40,5 +44,8 @@ export default {
   },
   FINDPROJECTTYPE: options => {
     return feth('FINDPROJECTTYPE', baseData['FINDPROJECTTYPE'], options)
+  },
+  DECRYPT: options => {
+    return feth('DECRYPT', baseData['DECRYPT'], options)
   },
 }

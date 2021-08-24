@@ -2,7 +2,7 @@ import { Component } from "react";
 import { View, Text, Image, ScrollView } from "@tarojs/components";
 import { AtButton, AtList, AtListItem, AtTabs, AtTabsPane } from "taro-ui";
 import { connect } from "react-redux";
-import api from "../../interMiddle/index";
+// import api from "../../interMiddle/index";
 // const connect: Function = concatRedux;
 import "taro-ui/dist/style/components/list.scss";
 import "taro-ui/dist/style/components/icon.scss";
@@ -10,6 +10,8 @@ import "taro-ui/dist/style/components/button.scss"; // 按需引入
 import "taro-ui/dist/style/components/tabs.scss";
 import "taro-ui/dist/style/components/flex.scss";
 import "./index.less";
+import api from "../../interMiddle";
+import Taro from '@tarojs/taro'
 const login = require('../static/login.png');
 // @connect(({ counter }) => counter)
 declare function create(o: object | null): void;
@@ -51,6 +53,17 @@ class Index extends Component {
 
   getPhoneNumber = (data) => {
     console.log(data);
+    Taro.login({
+      success: async res => {
+        let info = await api.DECRYPT({
+          code: res.code,
+          encryptedData: data.detail.encryptedData,
+          iv: data.detail.iv
+        })
+        console.log(info);
+      }
+    })
+
   }
   render() {
     return (
