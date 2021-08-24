@@ -137,7 +137,7 @@ class Index extends Component {
         {nowList.map((item, index) => {
           return <View className='at-row card' onClick={e => this.toDetail(item.id)}>
             <View className='at-col at-col-4'>
-              <Image style={{ width: '100%', height: '100%' }} mode="scaleToFill" src={item.logoUrl}></Image>
+              <Image style={{ width: '100%', height: '100%' }} mode="scaleToFill" src={'https://osslx01.oss-cn-beijing.aliyuncs.com/ytdp/upload/' + item.logoUrl}></Image>
             </View>
             <View className='at-col at-col-8'>
               <view className='title'>{item.name}</view>
