@@ -63,7 +63,7 @@ async function baseOptions(params, method = 'GET') {
     let userInfo = await Taro.request({
       isShowLoading: true,
       loadingText: '正在加载',
-      url: base + '/a/login',
+      url: base + `/a/login?code=${res.code}`,
       data: {
         // username: 'thinkgem',
         // password: 'admin',
@@ -72,12 +72,13 @@ async function baseOptions(params, method = 'GET') {
         code: res.code,
         __ajax: true,
       },
-      method: 'GET',
+      method: 'POST',
       header: {
         'content-type': 'application/x-www-form-urlencoded',
         token: token
       },
       success(res) {
+        // console.log(res);
         if (res.statusCode === HTTP_STATUS.NOT_FOUND) {
           return logError('api', '请求资源不存在')
         } else if (res.statusCode === HTTP_STATUS.BAD_GATEWAY) {
@@ -92,8 +93,8 @@ async function baseOptions(params, method = 'GET') {
         logError('api', '请求接口出现问题', e)
       }
     })
-    console.log(userInfo);
-    if (!userInfo.data.sessionid) {
+    // console.log(userInfo);
+    if (!(userInfo.data || {}).sessionid) {
       Taro.redirectTo({
         url: '/pages/login/index'
       })
@@ -125,14 +126,15 @@ async function baseOptions(params, method = 'GET') {
     url: base + url,
     data: {
       ...(data || {}),
-      'jeesite.session.id': token.sessionid
+      'jeesite.session.id': (token || {}).sessionid
     },
     method: method,
     header: {
       'content-type': contentType,
       token: token
     },
-    success(res) {
+    success: async (res) => {
+      console.log(res);
       if (res.statusCode === HTTP_STATUS.NOT_FOUND) {
         return logError('api', '请求资源不存在')
       } else if (res.statusCode === HTTP_STATUS.BAD_GATEWAY) {
@@ -140,6 +142,10 @@ async function baseOptions(params, method = 'GET') {
       } else if (res.statusCode === HTTP_STATUS.FORBIDDEN) {
         return logError('api', '没有权限访问')
       } else if (res.statusCode === HTTP_STATUS.SUCCESS) {
+        if (res.data.code === 401) {
+          await Taro.removeStorageSync('userInfo')
+          return baseOptions(params, method);
+        }
         return res.data
       }
     },
