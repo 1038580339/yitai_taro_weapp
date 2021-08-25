@@ -8,6 +8,10 @@ const baseData = {
   APPLYPROJECT: {
     url: '/a/api/project/ytdpProject/applyPorject',
     method: 'get'
+  },
+  REVIEWLIST: {
+    url: '/a/api/project/ytdpProject/findProjectReviewList',
+    method: 'get'
   }
 }
 
@@ -17,5 +21,8 @@ export default {
   },
   APPLYPROJECT: options => {
     return feth('APPLYPROJECT', baseData['APPLYPROJECT'], options)
+  },
+  REVIEWLIST: options => {
+    return feth('REVIEWLIST', baseData['REVIEWLIST'], options)
   }
 }

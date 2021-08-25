@@ -23,7 +23,8 @@ export default class PersonalEdit extends Component<any, any> {
         yyjb: "",
         zw: "",
         sr: "",
-        dh: ""
+        dh: "",
+        employeeCard: ""
       },
       showEdit: {
         name: false,
@@ -74,7 +75,8 @@ export default class PersonalEdit extends Component<any, any> {
             yyjb: data.level || "",
             zw: data.position || "",
             sr: data.birthday || "",
-            dh: res.data.data?.userInfo?.sysUser?.mobile || ""
+            dh: res.data.data?.userInfo?.sysUser?.mobile || "",
+            employeeCard: data.employeeCard
           }
         });
       })
@@ -95,7 +97,8 @@ export default class PersonalEdit extends Component<any, any> {
       city: data.city,
       name: data.name,
       photo: data.tx,
-      mobile: data.dh
+      mobile: data.dh,
+      employeeCard: data.employeeCard
     };
     console.log("sendData", sendData);
     api
@@ -182,7 +185,7 @@ export default class PersonalEdit extends Component<any, any> {
   render() {
     const { data, showEdit, showrlsb, isOpened } = this.state;
     console.log(2343244, showrlsb);
-    const { name, dw, yyjb, zw, sr, dh, tx } = data;
+    const { name, dw, yyjb, zw, sr, dh, tx, employeeCard } = data;
     return (
       <View className="personal_edit">
         {/* <AtDivider content='' /> */}
@@ -391,8 +394,49 @@ export default class PersonalEdit extends Component<any, any> {
           <View className="personal_edit_list_gz">
             <Text className="personal_edit_list_content_title">工作证</Text>
             <View className="gzz">
-              <View className="gzz_content"></View>
-              <View className="gzz_add">
+              {employeeCard ? (
+                <Image className="gzz_content" src={employeeCard} />
+              ) : (
+                <View className="gzz_content1"></View>
+              )}
+
+              <View
+                className="gzz_add"
+                onTouchStart={() => {
+                  const That = this;
+                  Taro.chooseImage({
+                    count: 1, // 默认9
+                    sizeType: ["original", "compressed"], // 可以指定是原图还是压缩图，默认二者都有
+                    sourceType: ["album", "camera"], // 可以指定来源是相册还是相机，默认二者都有，在H5浏览器端支持使用 `user` 和 `environment`分别指定为前后摄像头
+                    success: function(res) {
+                      // 返回选定照片的本地文件路径列表，tempFilePath可以作为img标签的src属性显示图片
+                      // var tempFilePaths = res.tempFilePaths;
+                      let token = Taro.getStorageSync("userInfo");
+                      console.log(res);
+                      Taro.uploadFile({
+                        url: `https://ytdp.ilonaltd.com/ytdp/a/upload/imageRaw?type=1&jeesite.session.id=${token.sessionid}`,
+                        filePath: res.tempFilePaths[0],
+                        name: "test",
+                        success: data => {
+                          console.log(
+                            "uploadFile",
+                            JSON.parse(data.data).data.filePath
+                          );
+
+                          That.setState({
+                            data: {
+                              ...That.state.data,
+                              employeeCard: `https://osslx01.oss-cn-beijing.aliyuncs.com/ytdp/upload/${
+                                JSON.parse(data.data).data.filePath
+                              }`
+                            }
+                          });
+                        }
+                      });
+                    }
+                  });
+                }}
+              >
                 <View className="at-icon at-icon-add"></View>
               </View>
             </View>
