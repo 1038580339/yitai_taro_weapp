@@ -31,77 +31,90 @@ export const logError = (name, action, info) => {
   // }
 }
 
-function baseOptions(params, method = 'GET') {
-
+async function baseOptions(params, method = 'GET') {
+  let {
+    url,
+    data
+  } = params
 
   let token = Taro.getStorageSync('userInfo');
-  if (token) {
+  if (token || String(url).indexOf('decrypt') !== -1 || String(url).indexOf('login') !== -1) {
     // options = {
     //   ...(options || {}),
     //   ['jeesite.session.id']: token.sessionid
     // }
   } else {
-    return Taro.login({
-      success: async res => {
-        // let userInfo = await api.LOGIN({
-        //   // wechatLogin: true,
-        //   // code: res.code,
-        //   username: 'admin',
-        //   password: 'admin',
-        //   mobileLogin: true,
-        //   __ajax: true,
-        // });
-        let userInfo = await Taro.request({
-          isShowLoading: true,
-          loadingText: '正在加载',
-          url: base + '/a/login',
-          data: {
-            username: 'thinkgem',
-            password: 'admin',
-            mobileLogin: true,
-            // wechatLogin: true,
-            // code: res.code,
-            __ajax: true,
-          },
-          method: 'POST',
-          header: {
-            'content-type': 'application/x-www-form-urlencoded',
-            token: token
-          },
-          success(res) {
-            if (res.statusCode === HTTP_STATUS.NOT_FOUND) {
-              return logError('api', '请求资源不存在')
-            } else if (res.statusCode === HTTP_STATUS.BAD_GATEWAY) {
-              return logError('api', '服务端出现了问题')
-            } else if (res.statusCode === HTTP_STATUS.FORBIDDEN) {
-              return logError('api', '没有权限访问')
-            } else if (res.statusCode === HTTP_STATUS.SUCCESS) {
-              return res.data
-            }
-          },
-          error(e) {
-            logError('api', '请求接口出现问题', e)
-          }
-        })
-        console.log(userInfo);
-        if (!userInfo.data.sessionid) {
-          Taro.redirectTo({
-            url: '/pages/login/index'
-          })
-        } else {
-          Taro.setStorageSync('userInfo', userInfo.data);
-          return baseOptions(params, method);
+    let needCall = false;
+    let res = await login();
+    // Taro.login({
+    //   success: res => {
+    //     // let userInfo = await api.LOGIN({
+    //     //   // wechatLogin: true,
+    //     //   // code: res.code,
+    //     //   username: 'admin',
+    //     //   password: 'admin',
+    //     //   mobileLogin: true,
+    //     //   __ajax: true,
+    //     // });
+    //     res = res;
+    //   }
+    // })
+
+    let userInfo = await Taro.request({
+      isShowLoading: true,
+      loadingText: '正在加载',
+      url: base + `/a/login?code=${res.code}`,
+      data: {
+        // username: 'thinkgem',
+        // password: 'admin',
+        // mobileLogin: true,
+        wechatLogin: true,
+        code: res.code,
+        __ajax: true,
+      },
+      method: 'POST',
+      header: {
+        'content-type': 'application/x-www-form-urlencoded',
+        token: token
+      },
+      success(res) {
+        // console.log(res);
+        if (res.statusCode === HTTP_STATUS.NOT_FOUND) {
+          return logError('api', '请求资源不存在')
+        } else if (res.statusCode === HTTP_STATUS.BAD_GATEWAY) {
+          return logError('api', '服务端出现了问题')
+        } else if (res.statusCode === HTTP_STATUS.FORBIDDEN) {
+          return logError('api', '没有权限访问')
+        } else if (res.statusCode === HTTP_STATUS.SUCCESS) {
+          return res.data
         }
+      },
+      error(e) {
+        logError('api', '请求接口出现问题', e)
       }
     })
+    // console.log(userInfo);
+    if (!(userInfo.data || {}).sessionid) {
+      Taro.redirectTo({
+        url: '/pages/login/index'
+      })
+      return;
+    } else {
+      await Taro.setStorageSync('userInfo', userInfo.data);
+      needCall = true;
+    }
+
+
+    if (needCall) {
+      // console.log(1);
+      return baseOptions(params, method);
+    }
+
   }
 
 
 
-  let {
-    url,
-    data
-  } = params
+
   // let token = getApp().globalData.token
   // if (!token) login()
   console.log('params', params)
@@ -113,14 +126,15 @@ function baseOptions(params, method = 'GET') {
     url: base + url,
     data: {
       ...(data || {}),
-      'jeesite.session.id': token.sessionid
+      'jeesite.session.id': (token || {}).sessionid
     },
     method: method,
     header: {
       'content-type': contentType,
       token: token
     },
-    success(res) {
+    success: async (res) => {
+      console.log(res);
       if (res.statusCode === HTTP_STATUS.NOT_FOUND) {
         return logError('api', '请求资源不存在')
       } else if (res.statusCode === HTTP_STATUS.BAD_GATEWAY) {
@@ -128,6 +142,10 @@ function baseOptions(params, method = 'GET') {
       } else if (res.statusCode === HTTP_STATUS.FORBIDDEN) {
         return logError('api', '没有权限访问')
       } else if (res.statusCode === HTTP_STATUS.SUCCESS) {
+        if (res.data.code === 401) {
+          await Taro.removeStorageSync('userInfo')
+          return baseOptions(params, method);
+        }
         return res.data
       }
     },
@@ -138,6 +156,25 @@ function baseOptions(params, method = 'GET') {
 
 
   return Taro.request(option)
+}
+
+
+function login() {
+  return new Promise((resolve, reject) => {
+    Taro.login({
+      success: res => {
+        // let userInfo = await api.LOGIN({
+        //   // wechatLogin: true,
+        //   // code: res.code,
+        //   username: 'admin',
+        //   password: 'admin',
+        //   mobileLogin: true,
+        //   __ajax: true,
+        // });
+        resolve(res);
+      }
+    })
+  })
 }
 
 export default {

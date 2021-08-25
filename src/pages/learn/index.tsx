@@ -6,6 +6,7 @@ import { connect } from 'react-redux'
 // import "taro-ui/dist/style/components/button.scss" // 按需引入
 import './index.less'
 import api from "../../interMiddle";
+import Taro from '@tarojs/taro'
 
 declare function create(o: object | null): void;
 interface tabListItem {
@@ -22,6 +23,7 @@ interface Project {
   list: Array<any>;
   status: "more" | "loading" | "noMore" | undefined;
   start: number;
+  recordsFiltered: number | null
 }
 // @connect(({ counter }) => counter)
 class Learn extends Component {
@@ -37,11 +39,13 @@ class Learn extends Component {
         list: [],
         status: 'more',
         start: 0,
+        recordsFiltered: null,
       },
       myProject: {
         list: [],
         status: 'more',
         start: 0,
+        recordsFiltered: null,
       }
 
     }
@@ -55,38 +59,82 @@ class Learn extends Component {
 
   componentWillUnmount() { }
 
-  async componentDidShow() {
+  componentDidShow() {
     const { current, project, myProject } = this.state;
-    let start;
+
     let nowProject = current === 0 ? project : myProject;
+    let start = nowProject.start;
+    if (start === 0) {
+      this.getList();
+    }
+  }
+
+  componentDidHide() { }
+
+  getList = async () => {
+    const { current, project, myProject } = this.state;
+
+
+    let nowProject = current === 0 ? project : myProject;
+    let start = nowProject.start;
+
+    this.setState({
+      [current === 0 ? 'project' : 'myProject']: {
+        ...nowProject,
+        status: "loading"
+      }
+    })
+
+    if (nowProject.recordsFiltered != null && nowProject['list'].length >= nowProject.recordsFiltered) {
+      this.setState({
+        [current === 0 ? 'project' : 'myProject']: {
+          ...nowProject,
+          status: "noMore"
+        }
+      })
+      return;
+    }
+
     let userInfo = await api.PROJECTPAGE({
-      start: nowProject.start,
+      start: start,
       length: 10,
       state: current + 1
     });
+    // console.log(userInfo);
     this.setState({
       [current === 0 ? 'project' : 'myProject']: {
         ...nowProject,
         list: [...nowProject['list'],
         ...userInfo.data.list
         ],
-        start: nowProject.start + 1
-
+        start: start + 1,
+        status: 'more',
+        recordsFiltered: userInfo.data.recordsFiltered,
       }
     })
   }
-
-  componentDidHide() { }
 
   handleClick = (value) => {
     // console.log(value);
     this.setState({
       current: value
+    }, () => {
+      const { current, project, myProject } = this.state;
+
+      let nowProject = current === 0 ? project : myProject;
+      let start = nowProject.start;
+      if (start === 0) {
+        this.getList();
+      }
     })
   }
-  getList = () => {
 
+  toDetail = id => {
+    Taro.navigateTo({
+      url: `/pages/projectDetail/index?id=${id}`,
+    })
   }
+
 
   render() {
     const { project, myProject, current } = this.state;
@@ -112,16 +160,16 @@ class Learn extends Component {
         </AtTabs>
         {
           list.map((item, index) => {
-            return <View className='at-row card'>
+            return <View className='at-row card' onClick={e => this.toDetail(item.id)}>
               <View className='at-col at-col-4'>
-                <Image style={{ width: '100%', height: '100%' }} mode="scaleToFill" src={"../static/bag_hover.png"}></Image>
+                <Image style={{ width: '100%', height: '100%' }} mode="scaleToFill" src={'https://osslx01.oss-cn-beijing.aliyuncs.com/ytdp/upload/' + item.logoUrl}></Image>
               </View>
               <View className='at-col at-col-8'>
-                <view className='title'>公开课：用企业微信组号服务123于增长12e43</view>
-                <view className='artContent'>最新最全官方教学与案列</view>
+                <view className='title'>{item.name}</view>
+                <view className='artContent'>{item.introduction}</view>
                 <view className='artTip'>
-                  <Text>地点：北京</Text>
-                  <Text style={{ float: 'right' }}>2021-05-23</Text>
+                  <Text>地点：{item.address}</Text>
+                  <Text style={{ float: 'right' }}>{item.updateDate}</Text>
                 </view>
               </View>
             </View>

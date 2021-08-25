@@ -23,7 +23,7 @@ interface userInfo {
   card?: boolean;
 }
 interface State {
-  list?: Array<userInfo>;
+  list: Array<userInfo>;
   userInfo: UserInfo;
 }
 interface UserInfo {
@@ -34,7 +34,7 @@ class Personal extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      list: [{ title: '单位', info: 'company' }, { title: '医院级别', info: 'level' }, { title: '职位', info: 'position' }, { title: '城市', info: 'city' }, { title: '生日', info: 'birthday' }, { title: '工作证', info: '1234', card: true },],
+      list: [{ title: '单位', info: 'company' }, { title: '医院级别', info: 'level' }, { title: '职位', info: 'position' }, { title: '城市', info: 'city' }, { title: '生日', info: 'birthday' }, { title: '工作证', info: 'employeeCard', card: true },],
       userInfo: {}
     }
   }
@@ -77,6 +77,10 @@ class Personal extends Component {
       });
   }
 
+  toList = e => {
+    console.log(e);
+  }
+
   render() {
     const { userInfo } = this.state;
     const { sysUser = {} } = userInfo;
@@ -85,12 +89,12 @@ class Personal extends Component {
         <view className='top'>
           <View className='at-row'>
             <View style='height:100px' className='at-col at-col-3'>
-              <AtAvatar circle image={sysUser.photo || 'https://jdc.jd.com/img/200'} size='large'></AtAvatar>
+              <AtAvatar circle image={sysUser.photo ? sysUser.photo : 'https://jdc.jd.com/img/200'} size='large'></AtAvatar>
             </View>
             <View className='at-col at-col-6'>
               <View className='top_name'>{sysUser.name}</View>
-              <View className='top_tip'>学习时长：10H</View>
-              <View className='top_tip'>积分：211</View>
+              <View className='top_tip'>学习时长：{userInfo.learningTime}H</View>
+              <View className='top_tip'>积分：{userInfo.point}</View>
             </View>
             <View className='at-col at-col-3'>
               <Image className='image_button' mode="scaleToFill" src={message} onClick={this.openEdit}></Image>
@@ -114,7 +118,7 @@ class Personal extends Component {
               }
             ]
           }
-            hasBorder={false} />
+            hasBorder={false} onClick={this.toList} />
         </View>
         <View className="list">
           <AtList>
@@ -123,7 +127,7 @@ class Personal extends Component {
                 return <AtCard
                   title={item.title}
                 >
-                  <Image className='image_card' mode="scaleToFill" src={'https://jdc.jd.com/img/200'}></Image>
+                  <Image className='image_card' mode="scaleToFill" src={userInfo[item.info] ? userInfo[item.info] : 'https://jdc.jd.com/img/200'}></Image>
                 </AtCard>
               }
               return <AtListItem title={item.title} extraText={userInfo[item.info] || ''} />
