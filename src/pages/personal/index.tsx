@@ -79,6 +79,16 @@ class Personal extends Component {
 
   toList = e => {
     console.log(e);
+    if (e.type === 'tab') {
+      Taro.switchTab({
+        url: e.url,
+      })
+    } else {
+      Taro.navigateTo({
+        url: e.url,
+      })
+    }
+
   }
 
   render() {
@@ -106,15 +116,19 @@ class Personal extends Component {
             [
               {
                 image: gift,
-                value: '换取积分'
+                value: '换取积分',
+                url: '/pages/reward/index?type=1'
               },
               {
                 image: record,
-                value: '领取记录'
+                value: '领取记录',
+                url: '/pages/reward/index?type=2'
               },
               {
                 image: learn,
-                value: '继续学习'
+                value: '继续学习',
+                url: '/pages/index/index',
+                type: 'tab'
               }
             ]
           }

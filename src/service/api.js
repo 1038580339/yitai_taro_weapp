@@ -63,7 +63,7 @@ async function baseOptions(params, method = 'GET') {
     let userInfo = await Taro.request({
       isShowLoading: true,
       loadingText: '正在加载',
-      url: base + `/a/login?code=${res.code}`,
+      url: base + `/a/login?code=${res.code}&wechatLogin=true&mobileLogin=true`,
       data: {
         // username: 'thinkgem',
         // password: 'admin',
