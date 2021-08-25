@@ -1,9 +1,11 @@
+
 .project_Detail {
     border-top: 1px solid #e5e5e5;
+    margin-bottom: 80px;
     .project_content {
         margin-top: 14px;
         border-top: 1px solid #e5e5e5;
-        border-bottom: 1px solid #e5e5e5;
+        // border-bottom: 1px solid #e5e5e5;
         padding: 27px;
         display: flex;
         flex-direction: column;
@@ -53,6 +55,9 @@
         .card {
             display: flex;
             width: 100%;
+            margin-bottom: 24px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid #e5e5e5;
             // justify-content: space-between;
             .left_card {
                 height: 115px;
@@ -88,13 +93,17 @@
             }
         }
     }
-    .bottom_btn_wrap {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 128px;
-        border-top: 1px solid #e5e5e5;
-        border-bottom: 1px solid #e5e5e5;
-        margin-top: 14px;
-    }
+}
+.bottom_btn_wrap {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 128px;
+    border-top: 1px solid #e5e5e5;
+    border-bottom: 1px solid #e5e5e5;
+    margin-top: 14px;
+    width: 100%;
+    position: fixed;
+    bottom: 0px;
+    background-color: #fff;
 }

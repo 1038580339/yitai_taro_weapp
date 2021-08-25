@@ -16,6 +16,7 @@ export default class Reward extends Component<any, any> {
   }
 
   handleClick(value) {
+    console.log(value);
     this.setState({
       current: value
     });

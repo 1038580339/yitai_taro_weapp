@@ -19,7 +19,9 @@ export default class ProjectDetail extends Component<any, any> {
       joinUsOnline: "",
       introduction: "",
       readingQuantity: 0,
-      address: ""
+      address: "",
+      // eslint-disable-next-line react/no-unused-state
+      reviewList: []
     };
   }
 
@@ -27,6 +29,7 @@ export default class ProjectDetail extends Component<any, any> {
 
   componentDidMount() {
     this.getProjectInfo();
+    this.getReviewList();
   }
 
   componentWillUnmount() {}
@@ -37,7 +40,7 @@ export default class ProjectDetail extends Component<any, any> {
 
   getProjectInfo = (params?: any): void => {
     const sendData = {
-      id: "70503610552e496cbdc3698fe011040e"
+      id: "f7ac95c247724ad4988381671903293a"
     };
     api
       .GETPROJECTINFO(sendData)
@@ -51,6 +54,24 @@ export default class ProjectDetail extends Component<any, any> {
           introduction: project.introduction,
           readingQuantity: project.readingQuantity,
           address: project.address
+        });
+      })
+      .catch(e => {
+        console.log(e);
+      });
+  };
+
+  getReviewList = (params?: any): void => {
+    const sendData = {
+      id: "f7ac95c247724ad4988381671903293a"
+    };
+    api
+      .REVIEWLIST(sendData)
+      .then(res => {
+        console.log(res);
+        const list = res.data.data.list;
+        this.setState({
+          reviewList: list
         });
       })
       .catch(e => {
@@ -84,6 +105,24 @@ export default class ProjectDetail extends Component<any, any> {
       });
   };
 
+  renderReviewList = () => {
+    return this.state.reviewList.map((item, index) => {
+      return (
+        <View className="card" key={index}>
+          <View className="left_card"></View>
+          <View className="right_card">
+            <Text className="project_title3">公开课：{`${item.name}`}</Text>
+            <Text className="project_title4">往期回顾：</Text>
+            <View className="project_title5_wrap">
+              <Text className="project_title5">地点：北京</Text>
+              <Text className="project_title5">2021-05-23</Text>
+            </View>
+          </View>
+        </View>
+      );
+    });
+  };
+
   render() {
     const {
       name,
@@ -95,45 +134,50 @@ export default class ProjectDetail extends Component<any, any> {
       address
     } = this.state;
     return (
-      <View className="project_Detail">
-        <View className="project_content">
-          <Text className="project_name">{name}</Text>
-          <View className="projrct_heard">
-            <Text className="projrct_dd">地点：{`${address}`}</Text>
-            <Text className="projrct_yd">{`阅读量：${readingQuantity}`}</Text>
-          </View>
-          <Text className="project_title">项目介绍：</Text>
-          <Text className="project_content_text">
-            {introduction}
-            {/* 项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍： */}
-          </Text>
-          {/* <Image
+      <View className="project_Detail_w" style={{ height: "100%" }}>
+        <View className="project_Detail">
+          <View className="project_content">
+            <Text className="project_name">{name}</Text>
+            <View className="projrct_heard">
+              <Text className="projrct_dd">地点：{`${address || ""}`}</Text>
+              <Text className="projrct_yd">{`阅读量：${readingQuantity ||
+                ""}`}</Text>
+            </View>
+            <Text className="project_title">项目介绍：</Text>
+            <Text className="project_content_text">
+              {introduction}
+              {/* 项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍： */}
+            </Text>
+            {/* <Image
             className="project_content_img"
             src="../../assets/images/back.png"
           /> */}
-          <Text className="project_title">参与报名：</Text>
-          <Text className="project_title" style={{ marginLeft: "30px" }}>
-            线上：{joinUsOnline}
-          </Text>
-          <Text className="project_title" style={{ marginLeft: "30px" }}>
-            线下：{joinUsOffline}
-          </Text>
-        </View>
-        <View className="project_content project_content2">
-          <Text className="project_title project_title2">往期回顾：</Text>
-          <View className="card">
-            <View className="left_card"></View>
-            <View className="right_card">
-              <Text className="project_title3">
-                公开课：用微信企业组好服务与增长
-              </Text>
-              <Text className="project_title4">往期回顾：</Text>
-              <View className="project_title5_wrap">
-                <Text className="project_title5">地点：北京</Text>
-                <Text className="project_title5">2021-05-23</Text>
-              </View>
-            </View>
+            <Text className="project_title">参与报名：</Text>
+            <Text className="project_title" style={{ marginLeft: "30px" }}>
+              线上：{joinUsOnline}
+            </Text>
+            <Text className="project_title" style={{ marginLeft: "30px" }}>
+              线下：{joinUsOffline}
+            </Text>
           </View>
+          <View className="project_content project_content2">
+            <Text className="project_title project_title2">往期回顾：</Text>
+            {this.renderReviewList()}
+            {/* <View className="card">
+              <View className="left_card"></View>
+              <View className="right_card">
+                <Text className="project_title3">
+                  公开课：用微信企业组好服务与增长
+                </Text>
+                <Text className="project_title4">往期回顾：</Text>
+                <View className="project_title5_wrap">
+                  <Text className="project_title5">地点：北京</Text>
+                  <Text className="project_title5">2021-05-23</Text>
+                </View>
+              </View>
+            </View> */}
+          </View>
+          <AtToast isOpened={isOpened} text="报名成功"></AtToast>
         </View>
         <View className="bottom_btn_wrap">
           <BottomBtn
@@ -146,7 +190,6 @@ export default class ProjectDetail extends Component<any, any> {
             btn2Title="报名"
           />
         </View>
-        <AtToast isOpened={isOpened} text="报名成功"></AtToast>
       </View>
     );
   }
