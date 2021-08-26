@@ -109,13 +109,23 @@ export default class ProjectDetail extends Component<any, any> {
     return this.state.reviewList.map((item, index) => {
       return (
         <View className="card" key={index}>
-          <View className="left_card"></View>
+          {!item.logoUrl ? (
+            <View className="left_card"></View>
+          ) : (
+            <Image
+              src={require(`https://osslx01.oss-cn-beijing.aliyuncs.com/ytdp/upload/${item.logoUrl}`)}
+            />
+          )}
           <View className="right_card">
             <Text className="project_title3">公开课：{`${item.name}`}</Text>
             <Text className="project_title4">往期回顾：</Text>
             <View className="project_title5_wrap">
-              <Text className="project_title5">地点：北京</Text>
-              <Text className="project_title5">2021-05-23</Text>
+              <Text className="project_title5">
+                地点： {`${item.address || ""}`}
+              </Text>
+              <Text className="project_title5">
+                {`${item.startTime || ""}`}
+              </Text>
             </View>
           </View>
         </View>
