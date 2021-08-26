@@ -41,7 +41,13 @@ export default class ListItem extends Component<any, any> {
           length: "10",
           state: "1"
         };
+        const sendData2 = {
+          start: "0",
+          length: "10",
+          state: "2"
+        };
         this.props.getList && this.props.getList(sendData1);
+        this.props.getList && this.props.getList(sendData2);
         this.handle();
       })
       .catch(e => {});
