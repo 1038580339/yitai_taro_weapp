@@ -143,11 +143,7 @@ async function baseOptions(params, method = 'GET') {
       } else if (res.statusCode === HTTP_STATUS.FORBIDDEN) {
         return logError('api', '没有权限访问')
       } else if (res.statusCode === HTTP_STATUS.SUCCESS) {
-        if (res.data.code === 401) {
-          await Taro.removeStorageSync('userInfo')
-          return baseOptions(params, method);
-        }
-        return res.data
+        return res.data;
       }
     },
     error(e) {
@@ -156,7 +152,14 @@ async function baseOptions(params, method = 'GET') {
   }
 
 
-  return Taro.request(option)
+  let endData = await Taro.request(option)
+  if (endData.data.code === 401) {
+    await Taro.removeStorageSync('userInfo')
+    let now = await baseOptions(params, method);
+    return now;
+  } else {
+    return endData;
+  }
 }
 
 

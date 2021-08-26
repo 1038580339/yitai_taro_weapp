@@ -100,7 +100,7 @@ class Learn extends Component {
       length: 10,
       state: current + 1
     });
-    // console.log(userInfo);
+    console.log('userInfo', userInfo);
     this.setState({
       [current === 0 ? 'project' : 'myProject']: {
         ...nowProject,
