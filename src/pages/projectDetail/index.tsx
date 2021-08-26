@@ -5,6 +5,7 @@ import { AtAvatar, AtButton, AtToast } from "taro-ui";
 import { connect } from "react-redux";
 import BottomBtn from "../../components/bottomBtn/index";
 import api from "../../interMiddle/index";
+import { timestampToTime } from "../../assets/js/utils";
 // const connect: Function = concatRedux;
 import "taro-ui/dist/style/components/button.scss"; // 按需引入
 import "./index.less";
@@ -124,7 +125,7 @@ export default class ProjectDetail extends Component<any, any> {
                 地点： {`${item.address || ""}`}
               </Text>
               <Text className="project_title5">
-                {`${item.startTime || ""}`}
+                {`${timestampToTime(Number(item.startTime)) || "--"}`}
               </Text>
             </View>
           </View>
