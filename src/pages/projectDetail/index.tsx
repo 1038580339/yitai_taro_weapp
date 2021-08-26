@@ -14,6 +14,7 @@ export default class ProjectDetail extends Component<any, any> {
   constructor(props) {
     super(props);
     this.state = {
+      id: '',
       isOpened: false,
       name: "",
       joinUsOffline: "",
@@ -22,26 +23,37 @@ export default class ProjectDetail extends Component<any, any> {
       readingQuantity: 0,
       address: "",
       // eslint-disable-next-line react/no-unused-state
-      reviewList: []
+      reviewList: [],
+      logoUrl: ''
     };
   }
 
-  componentWillMount() {}
+  onLoad(options) {
+    console.log(options);
+    this.setState({
+      id: options.id
+    })
+  }
+
+  componentWillMount() { }
 
   componentDidMount() {
+
+  }
+
+  componentWillUnmount() { }
+
+  componentDidShow() {
     this.getProjectInfo();
     this.getReviewList();
   }
 
-  componentWillUnmount() {}
-
-  componentDidShow() {}
-
-  componentDidHide() {}
+  componentDidHide() { }
 
   getProjectInfo = (params?: any): void => {
+    const { id } = this.state;
     const sendData = {
-      id: "f7ac95c247724ad4988381671903293a"
+      id: id
     };
     api
       .GETPROJECTINFO(sendData)
@@ -54,7 +66,8 @@ export default class ProjectDetail extends Component<any, any> {
           joinUsOnline: project.joinUsOnline,
           introduction: project.introduction,
           readingQuantity: project.readingQuantity,
-          address: project.address
+          address: project.address,
+          logoUrl: project.logoUrl,
         });
       })
       .catch(e => {
@@ -63,8 +76,9 @@ export default class ProjectDetail extends Component<any, any> {
   };
 
   getReviewList = (params?: any): void => {
+    const { id } = this.state;
     const sendData = {
-      id: "f7ac95c247724ad4988381671903293a"
+      id: id
     };
     api
       .REVIEWLIST(sendData)
@@ -81,8 +95,9 @@ export default class ProjectDetail extends Component<any, any> {
   };
 
   save = (): void => {
+    const { id } = this.state;
     const sendData = {
-      id: "f7ac95c247724ad4988381671903293a"
+      id: id
     };
     api
       .APPLYPROJECT(sendData)
@@ -113,10 +128,10 @@ export default class ProjectDetail extends Component<any, any> {
           {!item.logoUrl ? (
             <View className="left_card"></View>
           ) : (
-            <Image
-              src={require(`https://osslx01.oss-cn-beijing.aliyuncs.com/ytdp/upload/${item.logoUrl}`)}
-            />
-          )}
+              <Image
+                src={`https://osslx01.oss-cn-beijing.aliyuncs.com/ytdp/upload/${item.logoUrl}`}
+              />
+            )}
           <View className="right_card">
             <Text className="project_title3">公开课：{`${item.name}`}</Text>
             <Text className="project_title4">往期回顾：</Text>
@@ -142,7 +157,8 @@ export default class ProjectDetail extends Component<any, any> {
       introduction,
       isOpened,
       readingQuantity,
-      address
+      address,
+      logoUrl
     } = this.state;
     return (
       <View className="project_Detail_w" style={{ height: "100%" }}>
@@ -159,10 +175,10 @@ export default class ProjectDetail extends Component<any, any> {
               {introduction}
               {/* 项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍： */}
             </Text>
-            {/* <Image
-            className="project_content_img"
-            src="../../assets/images/back.png"
-          /> */}
+            {logoUrl ? <Image
+              className="project_content_img"
+              src={'https://osslx01.oss-cn-beijing.aliyuncs.com/ytdp/upload/' + logoUrl}
+            /> : null}
             <Text className="project_title">参与报名：</Text>
             <Text className="project_title" style={{ marginLeft: "30px" }}>
               线上：{joinUsOnline}

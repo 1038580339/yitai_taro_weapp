@@ -107,7 +107,8 @@ async function baseOptions(params, method = 'GET') {
 
     if (needCall) {
       // console.log(1);
-      return baseOptions(params, method);
+      const res = await baseOptions(params, method);
+      return res;
     }
 
   }
