@@ -10,7 +10,8 @@ export default class Rreceived extends Component<any, any> {
   constructor(props) {
     super(props);
     this.state = {
-      list: []
+      list: [],
+      start: 0
     };
   }
 
@@ -18,19 +19,31 @@ export default class Rreceived extends Component<any, any> {
     this.getList();
   }
 
-  getList = () => {
+  getList = (type = null) => {
     const sendData = {
-      start: "0",
+      start: type === "get" ? this.state.start + 1 : 0,
       length: "10",
       state: "2"
     };
+    this.props.setStatus("loading");
+    const That = this;
     api
       .FINDINTEGRATEPAGE(sendData)
       .then(res => {
         const data = res.data.list;
-        this.setState({
-          list: data
+        if (!data.length) {
+          That.props.setStatus("noMore");
+        } else {
+          That.props.setStatus("more");
+        }
+        That.setState({
+          list: [...That.state.list, ...data]
         });
+        if (type === "get") {
+          That.setState({
+            start: That.state.start + 1
+          });
+        }
       })
       .catch(e => {
         console.log(e);

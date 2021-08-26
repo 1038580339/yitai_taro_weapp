@@ -81,7 +81,7 @@ export default class ProjectDetail extends Component<any, any> {
 
   save = (): void => {
     const sendData = {
-      id: "70503610552e496cbdc3698fe011040e"
+      id: "f7ac95c247724ad4988381671903293a"
     };
     api
       .APPLYPROJECT(sendData)
