@@ -1,5 +1,5 @@
 import { Component } from "react";
-import { View, Text, Input, Image } from "@tarojs/components";
+import { View, Text, Input, Image, RichText } from "@tarojs/components";
 import Taro from "@tarojs/taro";
 import { AtAvatar, AtButton, AtToast } from "taro-ui";
 import { connect } from "react-redux";
@@ -14,7 +14,7 @@ export default class ProjectDetail extends Component<any, any> {
   constructor(props) {
     super(props);
     this.state = {
-      id: '',
+      id: "",
       isOpened: false,
       name: "",
       joinUsOffline: "",
@@ -24,7 +24,7 @@ export default class ProjectDetail extends Component<any, any> {
       address: "",
       // eslint-disable-next-line react/no-unused-state
       reviewList: [],
-      logoUrl: ''
+      logoUrl: ""
     };
   }
 
@@ -32,23 +32,21 @@ export default class ProjectDetail extends Component<any, any> {
     console.log(options);
     this.setState({
       id: options.id
-    })
+    });
   }
 
-  componentWillMount() { }
+  componentWillMount() {}
 
-  componentDidMount() {
+  componentDidMount() {}
 
-  }
-
-  componentWillUnmount() { }
+  componentWillUnmount() {}
 
   componentDidShow() {
     this.getProjectInfo();
     this.getReviewList();
   }
 
-  componentDidHide() { }
+  componentDidHide() {}
 
   getProjectInfo = (params?: any): void => {
     const { id } = this.state;
@@ -67,7 +65,7 @@ export default class ProjectDetail extends Component<any, any> {
           introduction: project.introduction,
           readingQuantity: project.readingQuantity,
           address: project.address,
-          logoUrl: project.logoUrl,
+          logoUrl: project.logoUrl
         });
       })
       .catch(e => {
@@ -128,10 +126,10 @@ export default class ProjectDetail extends Component<any, any> {
           {!item.logoUrl ? (
             <View className="left_card"></View>
           ) : (
-              <Image
-                src={`https://osslx01.oss-cn-beijing.aliyuncs.com/ytdp/upload/${item.logoUrl}`}
-              />
-            )}
+            <Image
+              src={`https://osslx01.oss-cn-beijing.aliyuncs.com/ytdp/upload/${item.logoUrl}`}
+            />
+          )}
           <View className="right_card">
             <Text className="project_title3">公开课：{`${item.name}`}</Text>
             <Text className="project_title4">往期回顾：</Text>
@@ -171,14 +169,19 @@ export default class ProjectDetail extends Component<any, any> {
                 ""}`}</Text>
             </View>
             <Text className="project_title">项目介绍：</Text>
-            <Text className="project_content_text">
+            {/* <Text className="project_content_text">
               {introduction}
-              {/* 项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍：项目介绍： */}
-            </Text>
-            {logoUrl ? <Image
-              className="project_content_img"
-              src={'https://osslx01.oss-cn-beijing.aliyuncs.com/ytdp/upload/' + logoUrl}
-            /> : null}
+            </Text> */}
+            <RichText nodes={introduction} />
+            {/* {logoUrl ? (
+              <Image
+                className="project_content_img"
+                src={
+                  "https://osslx01.oss-cn-beijing.aliyuncs.com/ytdp/upload/" +
+                  logoUrl
+                }
+              />
+            ) : null} */}
             <Text className="project_title">参与报名：</Text>
             <Text className="project_title" style={{ marginLeft: "30px" }}>
               线上：{joinUsOnline}
