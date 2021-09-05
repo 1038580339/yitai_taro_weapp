@@ -182,6 +182,19 @@ export default class PersonalEdit extends Component<any, any> {
     });
   };
 
+  faceChenk = () => {
+    Taro.startFacialRecognitionVerify({
+      name: "胡云坤",
+      idCardNumber: "330825199504264519",
+      fail: result => {
+        console.log("fail", result);
+      },
+      success: result => {
+        console.log("success", result);
+      }
+    });
+  };
+
   render() {
     const { data, showEdit, showrlsb, isOpened } = this.state;
     console.log(2343244, showrlsb);
@@ -441,11 +454,16 @@ export default class PersonalEdit extends Component<any, any> {
               </View>
             </View>
           </View>
-          {showrlsb === "true" ? (
-            <AtButton circle type="primary" className="rlyz_btn">
-              人脸验证
-            </AtButton>
-          ) : null}
+          {/* {showrlsb === "true" ? ( */}
+          <AtButton
+            circle
+            type="primary"
+            className="rlyz_btn"
+            onClick={this.faceChenk}
+          >
+            人脸验证
+          </AtButton>
+          {/* ) : null} */}
 
           <View style={{ marginTop: "38px" }}>
             <BottomBtn

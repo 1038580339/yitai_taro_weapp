@@ -172,7 +172,10 @@ export default class ProjectDetail extends Component<any, any> {
             {/* <Text className="project_content_text">
               {introduction}
             </Text> */}
-            <RichText nodes={introduction} />
+            <RichText
+              style={{ width: "100%", maxWidth: "100%" }}
+              nodes={introduction}
+            />
             {/* {logoUrl ? (
               <Image
                 className="project_content_img"
