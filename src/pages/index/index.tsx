@@ -53,7 +53,8 @@ class Index extends Component {
 
   componentWillUnmount() { }
 
-  componentDidShow() {
+  componentDidShow(options) {
+    console.log(options);
     this.getInfo();
   }
   onPullDownRefresh() {
@@ -68,13 +69,13 @@ class Index extends Component {
   };
   getInfo = () => {
     api
-      .FINDPROJECTTYPE()
+      .FINDVIDEORESOURCEPAGE()
       .then((res) => {
         let list = res.data.list;
         let code: Array<tabListItem> = [];
         for (let i in list) {
-          if (code.indexOf(list[i].code) === -1) {
-            code.push({ title: list[i].code })
+          if (code.indexOf(list[i].type.code) === -1) {
+            code.push({ title: list[i].type.code })
           }
         }
         this.setState({
@@ -85,18 +86,26 @@ class Index extends Component {
       })
       .catch((e) => {
         Taro.stopPullDownRefresh();
-        console.log("e", e);
+        // console.log("e", e);
       });
   }
-  toDetail = id => {
-    Taro.navigateTo({
-      url: `/pages/projectDetail/index?id=${id}`,
+  toDetail = url => {
+    // Taro.navigateTo({
+    //   url: `/pages/webView/index?url=${url}`,
+    // })
+    Taro.navigateToMiniProgram({
+      appId: 'wx92d650b253f8f2e3',
+      path: url,
+      success: function (res) {
+        // 打开成功
+      }
     })
+    // console.log(url);
   }
   render() {
     const { list, current, tabList } = this.state;
     let nowCode = (tabList[current] || {}).title || '';
-    let nowList = list.filter(item => item.code === nowCode);
+    let nowList = list.filter(item => item.type.code === nowCode);
     return (
       <View className="index">
         <AtList>
@@ -135,7 +144,7 @@ class Index extends Component {
           })}
         </AtTabs>
         {nowList.map((item, index) => {
-          return <View className='at-row card' onClick={e => this.toDetail(item.id)}>
+          return <View className='at-row card' onClick={e => this.toDetail(item.url)}>
             <View className='at-col at-col-4'>
               <Image style={{ width: '100%', height: '100%' }} mode="scaleToFill" src={'https://osslx01.oss-cn-beijing.aliyuncs.com/ytdp/upload/' + item.logoUrl}></Image>
             </View>

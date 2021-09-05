@@ -19,12 +19,16 @@ const baseData = {
     url: '/a/api/user/ytdpUser/getUserInfo',
     method: 'get'
   },
-  FINDPROJECTTYPE: {
-    url: '/a/api/project/ytdpProject/findProjectType',
+  FINDVIDEORESOURCEPAGE: {
+    url: '/a/api/learn/ytdpLearn/findAllVideoResourcePage',
     method: 'get'
   },
   DECRYPT: {
     url: '/wx/decryptPhoneNumber',
+    method: 'get'
+  },
+  CLOCKIN: {
+    url: '/a/api/learn/ytdpLearn/clockIn',
     method: 'get'
   }
 }
@@ -42,10 +46,13 @@ export default {
   GETUSERINFO: options => {
     return feth('GETUSERINFO', baseData['GETUSERINFO'], options)
   },
-  FINDPROJECTTYPE: options => {
-    return feth('FINDPROJECTTYPE', baseData['FINDPROJECTTYPE'], options)
+  FINDVIDEORESOURCEPAGE: options => {
+    return feth('FINDVIDEORESOURCEPAGE', baseData['FINDVIDEORESOURCEPAGE'], options)
   },
   DECRYPT: options => {
     return feth('DECRYPT', baseData['DECRYPT'], options)
+  },
+  CLOCKIN: options => {
+    return feth('CLOCKIN', baseData['CLOCKIN'], options)
   },
 }

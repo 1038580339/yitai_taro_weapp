@@ -6,7 +6,8 @@ export default {
     "pages/projectDetail/index",
     "pages/personal/index",
     "pages/reward/index",
-    "pages/login/index"
+    "pages/login/index",
+    "pages/webView/index"
   ],
   window: {
     backgroundTextStyle: "light",
