@@ -183,14 +183,27 @@ export default class PersonalEdit extends Component<any, any> {
   };
 
   faceChenk = () => {
-    Taro.startFacialRecognitionVerify({
-      name: "胡云坤",
-      idCardNumber: "330825199504264519",
-      fail: result => {
-        console.log("fail", result);
+    // Taro.startFacialRecognitionVerify({
+    //   name: "胡云坤",
+    //   idCardNumber: "330825199504264519",
+    //   fail: result => {
+    //     console.log("fail", result);
+    //   },
+    //   success: result => {
+    //     console.log("success", result);
+    //   }
+    // });
+    const CameraContext = Taro.createCameraContext();
+    // console.log("CameraContext", CameraContext);
+    CameraContext.takePhoto({
+      success: res => {
+        console.log("success", res);
       },
-      success: result => {
-        console.log("success", result);
+      fail: res => {
+        console.log("fail", res);
+      },
+      complete: res => {
+        console.log("conplete", res);
       }
     });
   };
