@@ -12,6 +12,10 @@ const baseData = {
   GETFACERECOGNITIONFUCTION: {
     url: '/a/api/system/ytdpSystemParameter/getFaceRecognitionFunction',
     method: 'get'
+  },
+  FACECHECK: {
+    url: '/a/api/user/ytdpUser/faceIdentification',
+    method: 'get'
   }
 }
 
@@ -28,5 +32,8 @@ export default {
       baseData['GETFACERECOGNITIONFUCTION'],
       options
     )
+  },
+  FACECHECK: options => {
+    return feth('FACECHECK', baseData['FACECHECK'], options)
   }
 }
