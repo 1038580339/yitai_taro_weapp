@@ -514,8 +514,7 @@ export default class PersonalEdit extends Component<any, any> {
           >
             人脸验证
           </AtButton>
-          {/* <Image src={checkSrc}></Image> */}
-          {/*  ) : null}*/}
+          {/* ) : null} */}
           {showCamera && <FaceCheck toggleCheck={this.toggleCheck} />}
           <View style={{ marginTop: "38px" }}>
             <BottomBtn

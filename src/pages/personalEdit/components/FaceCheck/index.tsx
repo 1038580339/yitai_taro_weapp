@@ -70,6 +70,7 @@ export default class ProjectDetail extends Component<any, any> {
           devicePosition="front"
           style={{ height: "400px", width: "95vw" }}
         />
+        <View className="face_check_kuang"></View>
         <AtButton className="face_check_btn" onClick={this.check}>
           拍照识别
         </AtButton>
