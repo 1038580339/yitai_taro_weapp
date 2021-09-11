@@ -1,6 +1,14 @@
 import { Component } from "react";
-import { View, Text, Image, ScrollView } from "@tarojs/components";
-import { AtButton, AtList, AtListItem, AtTabs, AtTabsPane } from "taro-ui";
+import { View, Text, Image, ScrollView, Radio } from "@tarojs/components";
+import Agreement from "./components/agreement";
+import {
+  AtButton,
+  AtList,
+  AtListItem,
+  AtTabs,
+  AtTabsPane,
+  AtToast
+} from "taro-ui";
 import { connect } from "react-redux";
 // import api from "../../interMiddle/index";
 // const connect: Function = concatRedux;
@@ -11,8 +19,8 @@ import "taro-ui/dist/style/components/tabs.scss";
 import "taro-ui/dist/style/components/flex.scss";
 import "./index.less";
 import api from "../../interMiddle";
-import Taro from '@tarojs/taro'
-const login = require('../static/login.png');
+import Taro from "@tarojs/taro";
+const login = require("../static/login.png");
 // @connect(({ counter }) => counter)
 declare function create(o: object | null): void;
 interface tabListItem {
@@ -20,18 +28,20 @@ interface tabListItem {
 }
 
 interface State {
-  [propName: string]: any
+  [propName: string]: any;
 }
 
 class Index extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-
-    };
+    this.state = {};
   }
-  state: State;
-  componentWillMount() { }
+  state: State = {
+    radio: false,
+    isOpened: false,
+    showA: false
+  };
+  componentWillMount() {}
 
   componentDidMount() {
     // console.log("api", api.LOGIN);
@@ -45,13 +55,19 @@ class Index extends Component {
     //   });
   }
 
-  componentWillUnmount() { }
+  componentWillUnmount() {}
 
-  componentDidShow() { }
+  componentDidShow() {}
 
-  componentDidHide() { }
+  componentDidHide() {}
 
-  getPhoneNumber = (data) => {
+  toggle = val => {
+    this.setState({
+      showA: val
+    });
+  };
+
+  getPhoneNumber = data => {
     console.log(data);
     Taro.login({
       success: async res => {
@@ -59,9 +75,24 @@ class Index extends Component {
           code: res.code,
           encryptedData: data.detail.encryptedData,
           iv: data.detail.iv
-        })
-        console.log(info);
-        if (info.data.data) {
+        });
+        console.log("login", info);
+        if (!this.state.radio) {
+          this.setState(
+            {
+              isOpened: true
+            },
+            () => {
+              setTimeout(() => {
+                this.setState({
+                  isOpened: false
+                });
+              }, 1000);
+            }
+          );
+          return;
+        }
+        if (info.data.data && this.state.radio) {
           Taro.login({
             success: async res => {
               let userInfo = await api.LOGIN({
@@ -70,30 +101,39 @@ class Index extends Component {
                 username: info.data.data,
                 password: info.data.data,
                 mobileLogin: true,
-                __ajax: true,
+                __ajax: true
               });
-              await Taro.setStorageSync('userInfo', userInfo.data);
+              await Taro.setStorageSync("userInfo", userInfo.data);
               Taro.switchTab({
-                url: '/pages/learn/index'
-              })
+                url: "/pages/learn/index"
+              });
             }
-          })
+          });
         }
       }
-    })
+    });
+  };
 
-  }
   render() {
     return (
       <View className="login">
-        <Image
-          className={'loginBg'}
-          src={login}
-        />
-        <View className={'loginContent'}>
-          <Text className={'title'}>您还没有登录</Text>
-          <AtButton type='primary' className={'button'} openType="getPhoneNumber" onGetPhoneNumber={this.getPhoneNumber}>微信登录</AtButton>
+        <Image className={"loginBg"} src={login} />
+        <View className={"loginContent"}>
+          <Text className={"title"}>您还没有登录</Text>
+          <AtButton
+            type="primary"
+            className={"button"}
+            openType="getPhoneNumber"
+            onGetPhoneNumber={this.getPhoneNumber}
+          >
+            微信登录
+          </AtButton>
+          <Radio checked={this.state.radio}>
+            登入代表您已同意逸态学习用户服务协议，隐私政策
+          </Radio>
         </View>
+        {this.state.showA && <Agreement toggle={this.toggle} />}
+        <AtToast isOpened={this.state.isOpened} text="请先同意协议"></AtToast>
       </View>
     );
   }
