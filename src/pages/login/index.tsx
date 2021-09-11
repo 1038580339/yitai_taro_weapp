@@ -128,9 +128,16 @@ class Index extends Component {
           >
             微信登录
           </AtButton>
-          <Radio checked={this.state.radio}>
-            登入代表您已同意逸态学习用户服务协议，隐私政策
-          </Radio>
+          <View style={{ display: "flex" }}>
+            <Radio checked={this.state.radio} />
+            <View
+              onClick={() => {
+                this.toggle(true);
+              }}
+            >
+              <Text>登入代表您已同意逸态学习用户服务协议，隐私政策</Text>
+            </View>
+          </View>
         </View>
         {this.state.showA && <Agreement toggle={this.toggle} />}
         <AtToast isOpened={this.state.isOpened} text="请先同意协议"></AtToast>
