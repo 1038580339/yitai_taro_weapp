@@ -34,7 +34,9 @@ interface State {
 class Index extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      type: ""
+    };
   }
   state: State = {
     radio: false,
@@ -128,18 +130,57 @@ class Index extends Component {
           >
             微信登录
           </AtButton>
-          <View style={{ display: "flex" }}>
+          <View
+            style={{
+              display: "flex",
+              width: "100vw",
+              justifyContent: "center",
+              alignItems: "center",
+              marginTop: "6px"
+            }}
+          >
             <Radio checked={this.state.radio} />
-            <View
-              onClick={() => {
-                this.toggle(true);
-              }}
-            >
-              <Text>登入代表您已同意逸态学习用户服务协议，隐私政策</Text>
+            <View>
+              <View className="text_xieyi">
+                <Text>登入代表您已同意逸态学习</Text>
+                <View
+                  onClick={() => {
+                    this.setState(
+                      {
+                        type: "yh"
+                      },
+                      () => {
+                        this.toggle(true);
+                      }
+                    );
+                  }}
+                  style={{ color: "#00BBFF" }}
+                >
+                  <Text>用户服务协议</Text>
+                </View>
+                ，
+                <View
+                  onClick={() => {
+                    this.setState(
+                      {
+                        type: "yc"
+                      },
+                      () => {
+                        this.toggle(true);
+                      }
+                    );
+                  }}
+                  style={{ color: "#00BBFF" }}
+                >
+                  <Text>隐私政策</Text>
+                </View>
+              </View>
             </View>
           </View>
         </View>
-        {this.state.showA && <Agreement toggle={this.toggle} />}
+        {this.state.showA && (
+          <Agreement type={this.state.type} toggle={this.toggle} />
+        )}
         <AtToast isOpened={this.state.isOpened} text="请先同意协议"></AtToast>
       </View>
     );

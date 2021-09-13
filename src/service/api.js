@@ -1,11 +1,7 @@
 import Taro from '@tarojs/taro'
-import api from '../interMiddle';
-import {
-  HTTP_STATUS
-} from './status'
-import {
-  base
-} from './config'
+import api from '../interMiddle'
+import { HTTP_STATUS } from './status'
+import { base } from './config'
 // import { logError } from '../assets/js/utils.js'
 
 const token = ''
@@ -31,21 +27,22 @@ export const logError = (name, action, info) => {
   // }
 }
 
-async function baseOptions(params, method = 'GET') {
-  let {
-    url,
-    data
-  } = params
+async function baseOptions (params, method = 'GET') {
+  let { url, data } = params
 
-  let token = Taro.getStorageSync('userInfo');
-  if (token || String(url).indexOf('decrypt') !== -1 || String(url).indexOf('login') !== -1) {
+  let token = Taro.getStorageSync('userInfo')
+  if (
+    token ||
+    String(url).indexOf('decrypt') !== -1 ||
+    String(url).indexOf('login') !== -1
+  ) {
     // options = {
     //   ...(options || {}),
     //   ['jeesite.session.id']: token.sessionid
     // }
   } else {
-    let needCall = false;
-    let res = await login();
+    let needCall = false
+    let res = await login()
     // Taro.login({
     //   success: res => {
     //     // let userInfo = await api.LOGIN({
@@ -70,14 +67,14 @@ async function baseOptions(params, method = 'GET') {
         // mobileLogin: true,
         wechatLogin: true,
         code: res.code,
-        __ajax: true,
+        __ajax: true
       },
       method: 'POST',
       header: {
         'content-type': 'application/x-www-form-urlencoded',
         token: token
       },
-      success(res) {
+      success (res) {
         // console.log(res);
         if (res.statusCode === HTTP_STATUS.NOT_FOUND) {
           return logError('api', '请求资源不存在')
@@ -89,32 +86,27 @@ async function baseOptions(params, method = 'GET') {
           return res.data
         }
       },
-      error(e) {
+      error (e) {
         logError('api', '请求接口出现问题', e)
       }
     })
     // console.log(userInfo);
-    if (!(userInfo.data || {}).sessionid) {
+    if ((userInfo.data || {}).sessionid) {
       Taro.redirectTo({
         url: '/pages/login/index'
       })
-      return;
+      return
     } else {
-      await Taro.setStorageSync('userInfo', userInfo.data);
-      needCall = true;
+      await Taro.setStorageSync('userInfo', userInfo.data)
+      needCall = true
     }
-
 
     if (needCall) {
       // console.log(1);
-      const res = await baseOptions(params, method);
-      return res;
+      const res = await baseOptions(params, method)
+      return res
     }
-
   }
-
-
-
 
   // let token = getApp().globalData.token
   // if (!token) login()
@@ -134,8 +126,8 @@ async function baseOptions(params, method = 'GET') {
       'content-type': contentType,
       token: token
     },
-    success: async (res) => {
-      console.log(res);
+    success: async res => {
+      console.log(res)
       if (res.statusCode === HTTP_STATUS.NOT_FOUND) {
         return logError('api', '请求资源不存在')
       } else if (res.statusCode === HTTP_STATUS.BAD_GATEWAY) {
@@ -143,27 +135,25 @@ async function baseOptions(params, method = 'GET') {
       } else if (res.statusCode === HTTP_STATUS.FORBIDDEN) {
         return logError('api', '没有权限访问')
       } else if (res.statusCode === HTTP_STATUS.SUCCESS) {
-        return res.data;
+        return res.data
       }
     },
-    error(e) {
+    error (e) {
       logError('api', '请求接口出现问题', e)
     }
   }
 
-
   let endData = await Taro.request(option)
   if (endData.data.code === 401) {
     await Taro.removeStorageSync('userInfo')
-    let now = await baseOptions(params, method);
-    return now;
+    let now = await baseOptions(params, method)
+    return now
   } else {
-    return endData;
+    return endData
   }
 }
 
-
-function login() {
+function login () {
   return new Promise((resolve, reject) => {
     Taro.login({
       success: res => {
@@ -175,14 +165,14 @@ function login() {
         //   mobileLogin: true,
         //   __ajax: true,
         // });
-        resolve(res);
+        resolve(res)
       }
     })
   })
 }
 
 export default {
-  get(url, data = '') {
+  get (url, data = '') {
     let option = {
       url,
       data
