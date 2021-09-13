@@ -71,6 +71,21 @@ class Index extends Component {
 
   getPhoneNumber = data => {
     console.log(data);
+    if (!this.state.radio) {
+      this.setState(
+        {
+          isOpened: true
+        },
+        () => {
+          setTimeout(() => {
+            this.setState({
+              isOpened: false
+            });
+          }, 1000);
+        }
+      );
+      return;
+    }
     Taro.login({
       success: async res => {
         let info = await api.DECRYPT({
@@ -79,21 +94,7 @@ class Index extends Component {
           iv: data.detail.iv
         });
         console.log("login", info);
-        if (!this.state.radio) {
-          this.setState(
-            {
-              isOpened: true
-            },
-            () => {
-              setTimeout(() => {
-                this.setState({
-                  isOpened: false
-                });
-              }, 1000);
-            }
-          );
-          return;
-        }
+
         if (info.data.data && this.state.radio) {
           Taro.login({
             success: async res => {

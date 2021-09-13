@@ -91,7 +91,7 @@ async function baseOptions (params, method = 'GET') {
       }
     })
     // console.log(userInfo);
-    if ((userInfo.data || {}).sessionid) {
+    if (!(userInfo.data || {}).sessionid) {
       Taro.redirectTo({
         url: '/pages/login/index'
       })
