@@ -35,6 +35,12 @@
           "pathName": "pages/index/index",
           "query": "",
           "scene": null
+        },
+        {
+          "name": "pages/login/index",
+          "pathName": "pages/learn/index",
+          "query": "",
+          "scene": null
         }
       ]
     }
