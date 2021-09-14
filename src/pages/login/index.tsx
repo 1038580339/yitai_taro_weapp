@@ -43,7 +43,7 @@ class Index extends Component {
     isOpened: false,
     showA: false
   };
-  componentWillMount() {}
+  componentWillMount() { }
 
   componentDidMount() {
     // console.log("api", api.LOGIN);
@@ -57,11 +57,11 @@ class Index extends Component {
     //   });
   }
 
-  componentWillUnmount() {}
+  componentWillUnmount() { }
 
-  componentDidShow() {}
+  componentDidShow() { }
 
-  componentDidHide() {}
+  componentDidHide() { }
 
   toggle = val => {
     this.setState({
@@ -117,6 +117,13 @@ class Index extends Component {
     });
   };
 
+  radioChange = e => {
+    // console.log(e);
+    this.setState({
+      radio: !this.state.radio
+    })
+  }
+
   render() {
     return (
       <View className="login">
@@ -140,7 +147,7 @@ class Index extends Component {
               marginTop: "6px"
             }}
           >
-            <Radio checked={this.state.radio} />
+            <Radio checked={this.state.radio} onClick={this.radioChange} />
             <View>
               <View className="text_xieyi">
                 <Text>登入代表您已同意逸态学习</Text>
