@@ -22,6 +22,7 @@ interface State {
   tabList: Array<tabListItem>;
   current: number;
   list: Array<list>;
+  listForNext: Array<list>;
 }
 interface list {
   code: string;
@@ -34,6 +35,7 @@ class Index extends Component {
       tabList: [],
       current: 0,
       list: [],
+      listForNext: [],
     };
   }
   state: State;
@@ -88,6 +90,31 @@ class Index extends Component {
         Taro.stopPullDownRefresh();
         // console.log("e", e);
       });
+
+
+    api
+      .FINDLIVEVIEWPAGE()
+      .then((res) => {
+        console.log(res);
+        let list = res.data.list;
+        // let code: Array<tabListItem> = [];
+        // for (let i in list) {
+        //   if (code.indexOf(list[i].type.code) === -1) {
+        //     code.push({ title: list[i].type.code })
+        //   }
+        // }
+        this.setState({
+          listForNext: list,
+          // tabList: code
+        })
+        Taro.stopPullDownRefresh();
+      })
+      .catch((e) => {
+        Taro.stopPullDownRefresh();
+        // console.log("e", e);
+      });
+
+
   }
   toDetail = url => {
     // Taro.navigateTo({
@@ -101,9 +128,11 @@ class Index extends Component {
       }
     })
     // console.log(url);
+
+
   }
   render() {
-    const { list, current, tabList } = this.state;
+    const { list, current, tabList, listForNext } = this.state;
     let nowCode = (tabList[current] || {}).title || '';
     let nowList = list.filter(item => item.type.code === nowCode);
     return (
@@ -111,23 +140,21 @@ class Index extends Component {
         <AtList>
           <AtListItem title="近期直播预告" />
         </AtList>
-        <View className="at-row card">
-          <View className="at-col at-col-4">
-            <Image
-              style={{ width: "100%", height: "100%" }}
-              mode="scaleToFill"
-              src={"../static/bag_hover.png"}
-            ></Image>
+        {listForNext.map((item, index) => {
+          return <View className='at-row card' onClick={e => this.toDetail(item.url)}>
+            <View className='at-col at-col-4'>
+              <Image style={{ width: '100%', height: '100%' }} mode="scaleToFill" src={'https://osslx01.oss-cn-beijing.aliyuncs.com/ytdp/upload/' + item.logoUrl}></Image>
+            </View>
+            <View className='at-col at-col-8'>
+              <view className='title'>{item.name}</view>
+              <view className='artContent'>{item.description}</view>
+              <view className='artTip'>
+                <Text>地点：{item.address}</Text>
+                <Text style={{ float: 'right' }}>{item.updateDate}</Text>
+              </view>
+            </View>
           </View>
-          <View className="at-col at-col-8">
-            <view className="title">公开课：用企业微信组号服务于增长12e43</view>
-            <view className="artContent">最新最全官方教学与案列</view>
-            <view className="artTip">
-              <Text>地点：北京</Text>
-              <Text style={{ float: "right" }}>2021-05-23</Text>
-            </view>
-          </View>
-        </View>
+        })}
         <AtTabs
           current={this.state.current}
           tabList={this.state.tabList}

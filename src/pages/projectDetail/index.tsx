@@ -219,7 +219,7 @@ export default class ProjectDetail extends Component<any, any> {
                 url: "../../pages/learn/index"
               });
             }}
-            handle={this.save}
+            handle={this.save}  
             btn2Title="报名"
           />
         </View>

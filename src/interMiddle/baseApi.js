@@ -30,6 +30,10 @@ const baseData = {
   CLOCKIN: {
     url: '/a/api/learn/ytdpLearn/clockIn',
     method: 'get'
+  },
+  FINDLIVEVIEWPAGE: {
+    url: '/visitor/api/learn/ytdpLearn/findLivePreviewPage',
+    method: 'get'
   }
 }
 
@@ -54,5 +58,8 @@ export default {
   },
   CLOCKIN: options => {
     return feth('CLOCKIN', baseData['CLOCKIN'], options)
+  },
+  FINDLIVEVIEWPAGE: options => {
+    return feth('FINDLIVEVIEWPAGE', baseData['FINDLIVEVIEWPAGE'], options)
   },
 }
